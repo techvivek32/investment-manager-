@@ -1,18 +1,7 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/api/admin/stats/route": "app/api/admin/stats/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/api/businesses/[id]/documents/[docId]/route": "app/api/businesses/[id]/documents/[docId]/route.js",
-  "/api/businesses/[id]/documents/route": "app/api/businesses/[id]/documents/route.js",
-  "/api/businesses/[id]/route": "app/api/businesses/[id]/route.js",
-  "/api/businesses/route": "app/api/businesses/route.js",
-  "/api/investments/route": "app/api/investments/route.js",
-  "/api/investor/businesses/route": "app/api/investor/businesses/route.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/investor/businesses/[id]/page": "app/investor/businesses/[id]/page.js",
-  "/investor/businesses/page": "app/investor/businesses/page.js",
-  "/investor/dashboard/page": "app/investor/dashboard/page.js",
-  "/investor/investments/page": "app/investor/investments/page.js",
-  "/login/page": "app/login/page.js",
-  "/owner/businesses/[id]/page": "app/owner/businesses/[id]/page.js",
-  "/owner/dashboard/page": "app/owner/dashboard/page.js"
+  "/login/page": "app/login/page.js"
 }
