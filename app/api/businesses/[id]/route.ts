@@ -21,7 +21,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     const { id } = await params
     await connectDB()
 
-    const business = await Business.findById(id).populate("ownerId", "name email").populate("documents")
+    const business = await Business.findById(id)
+      .populate("ownerId", "name email")
 
     if (!business) {
       return notFoundResponse()
@@ -29,12 +30,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     // Authorization checks
     if (user.role === "business_owner") {
-      // Owners can only see their own businesses
-      if (!isOwner(user.id, business.ownerId._id.toString())) {
+      const ownerId = typeof business.ownerId === 'object' ? business.ownerId._id.toString() : business.ownerId.toString()
+      if (ownerId !== user.id) {
         return forbiddenResponse()
       }
     } else if (user.role === "investor") {
-      // Investors can only see businesses assigned to them
       if (business.status !== "approved") {
         return forbiddenResponse()
       }
@@ -48,7 +48,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         return forbiddenResponse()
       }
     }
-    // Admins can see all businesses
 
     return successResponse(business)
   } catch (error) {
@@ -74,7 +73,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     }
 
     // Only owner can edit
-    if (!isOwner(user.id, business.ownerId.toString())) {
+    if (business.ownerId.toString() !== user.id) {
       return forbiddenResponse()
     }
 

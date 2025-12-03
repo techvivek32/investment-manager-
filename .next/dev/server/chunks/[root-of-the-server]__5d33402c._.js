@@ -642,18 +642,17 @@ async function GET(request, { params }) {
         }
         const { id } = await params;
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2f$mongoose$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["connectDB"])();
-        const business = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Business$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Business"].findById(id).populate("ownerId", "name email").populate("documents");
+        const business = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$models$2f$Business$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["Business"].findById(id).populate("ownerId", "name email");
         if (!business) {
             return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$response$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["notFoundResponse"])();
         }
         // Authorization checks
         if (user.role === "business_owner") {
-            // Owners can only see their own businesses
-            if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$middleware$2f$auth$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["isOwner"])(user.id, business.ownerId._id.toString())) {
+            const ownerId = typeof business.ownerId === 'object' ? business.ownerId._id.toString() : business.ownerId.toString();
+            if (ownerId !== user.id) {
                 return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$response$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["forbiddenResponse"])();
             }
         } else if (user.role === "investor") {
-            // Investors can only see businesses assigned to them
             if (business.status !== "approved") {
                 return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$response$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["forbiddenResponse"])();
             }
@@ -665,7 +664,6 @@ async function GET(request, { params }) {
                 return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$response$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["forbiddenResponse"])();
             }
         }
-        // Admins can see all businesses
         return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$response$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["successResponse"])(business);
     } catch (error) {
         console.error("Get business error:", error);
@@ -685,7 +683,7 @@ async function PATCH(request, { params }) {
             return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$response$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["notFoundResponse"])();
         }
         // Only owner can edit
-        if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$middleware$2f$auth$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["isOwner"])(user.id, business.ownerId.toString())) {
+        if (business.ownerId.toString() !== user.id) {
             return (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2f$response$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["forbiddenResponse"])();
         }
         // Can only edit if pending or rejected

@@ -1,7 +1,10 @@
 {
-  "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/api/admin/stats/route": "app/api/admin/stats/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/businesses/[id]/route": "app/api/businesses/[id]/route.js",
+  "/api/businesses/route": "app/api/businesses/route.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/login/page": "app/login/page.js"
+  "/login/page": "app/login/page.js",
+  "/owner/businesses/[id]/page": "app/owner/businesses/[id]/page.js",
+  "/owner/businesses/new/page": "app/owner/businesses/new/page.js",
+  "/owner/dashboard/page": "app/owner/dashboard/page.js"
 }
